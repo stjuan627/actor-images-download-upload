@@ -55,7 +55,7 @@
             "title": "Upload to",
             "type": "string",
             "description": "Where do you want to upload the image files",
-            "enum": ["key-value-store", "s3", "no-upload"],
+            "enum": ["key-value-store", "s3", "oss", "no-upload"],
             "sectionCaption": "Image upload options"
         },
         "uploadStoreName": {
@@ -64,19 +64,19 @@
             "description": "Key-value store name where the images will be upload. Empty field means it will be uploaded to the default key-value store",
             "editor": "textfield"
         },
-        "s3Bucket":{
+        "s3Bucket": {
             "title": "S3 Bucket",
             "type": "string",
             "description": "Only relevant if you want to upload to S3! Name of the bucket where to upload.",
             "editor": "textfield"
         },
-        "s3AccessKeyId":{
+        "s3AccessKeyId": {
             "title": "S3 Access key id",
             "type": "string",
             "description": "Only relevant if you want to upload to S3! You can create these credentials for IAM user.",
             "editor": "textfield"
         },
-        "s3SecretAccessKey":{
+        "s3SecretAccessKey": {
             "title": "S3 Secret access key",
             "type": "string",
             "description": "Only relevant if you want to upload to S3! You can create these credentials for IAM user.",
@@ -86,6 +86,30 @@
             "title": "Check if key is already on S3",
             "type": "boolean",
             "description": "This option is useful if you don't want to rewrite the same image. GET requests are also cheaper than PUT requests"
+        },
+        "ossRegion": {
+            "title": "OSS Region",
+            "type": "string",
+            "description": "Only relevant if you want to upload to OSS! Name of the bucket where to upload.",
+            "editor": "textfield"
+        },
+        "ossBucket": {
+            "title": "OSS Bucket",
+            "type": "string",
+            "description": "Only relevant if you want to upload to OSS! Name of the bucket where to upload.",
+            "editor": "textfield"
+        },
+        "ossAccessKeyId": {
+            "title": "OSS Access key id",
+            "type": "string",
+            "description": "Only relevant if you want to upload to OSS! You can create these credentials for IAM user.",
+            "editor": "textfield"
+        },
+        "ossAccessKeySecret": {
+            "title": "OSS access key secret",
+            "type": "string",
+            "description": "Only relevant if you want to upload to OSS! You can create these credentials for IAM user.",
+            "editor": "textfield"
         },
         "preDownloadFunction": {
             "title": "Pre-download function",

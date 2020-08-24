@@ -2,7 +2,7 @@ const Apify = require('apify');
 
 const { defaultFileNameFunction } = require('./default-functions');
 const { DEFAULT_BATCH_SIZE, DEFAULT_REQUEST_EXTERNAL_TIMEOUT } = require('./constants.js');
-const { setS3 } = require('./utils.js');
+const { setS3, setOSS } = require('./utils.js');
 
 module.exports.constantsFromInput = async (input) => {
     // Small hack to automatically load from webhook (no need for payload template)
@@ -24,6 +24,10 @@ module.exports.constantsFromInput = async (input) => {
         s3AccessKeyId,
         s3SecretAccessKey,
         s3CheckIfAlreadyThere,
+        ossRegion,
+        ossBucket,
+        ossAccessKeyId,
+        ossAccessKeySecret,
         // Transforming functions
         preDownloadFunction,
         postDownloadFunction,
@@ -51,9 +55,11 @@ module.exports.constantsFromInput = async (input) => {
         convertWebpToPng,
     };
     const s3Credentials = { s3Bucket, s3AccessKeyId, s3SecretAccessKey };
+    const ossCredentials = { ossRegion, ossBucket, ossAccessKeyId, ossAccessKeySecret }
     const uploadOptions = {
         uploadTo,
         s3Client: uploadTo === 's3' ? setS3(s3Credentials) : null,
+        ossClient: uploadTo === 'oss' ? setOSS(ossCredentials) : null,
         storeHandle: uploadStoreName ? await Apify.openKeyValueStore(uploadStoreName) : null,
     };
     const downloadOptions = {
@@ -98,7 +104,11 @@ module.exports.checkInput = (input) => {
     if (!input.uploadTo) throw new Error('INPUT.uploadTo has to be specified!');
 
     if (input.uploadTo === 's3' && (!input.s3Bucket || !input.s3AccessKeyId || !input.s3SecretAccessKey)) {
-        throw new Error('If you want to upload to S3, you have to provide all of s3Bucket, s3AccessKeyId and s3SecretAccessKey in input!');
+        throw new Error('If you want to upload to S3, you have to provide all of s3Bucket, s3AccessKeyId and s3SecretAccessKey in input!')
+    }
+
+    if (input.uploadTo === 'oss' && (!input.ossRegion || !input.ossBucket || !input.ossAccessKeyId || !input.ossAccessKeySecret)) {
+        throw new Error('If you want to upload to OSS, you have to provide all of ossRegion, ossBucket, ossAccessKeyId and ossAccessKeySecret in input!')
     }
 
     if (!datasetId && !input.storeInput) {

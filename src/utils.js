@@ -1,8 +1,9 @@
 const AWS = require('aws-sdk');
+const OSS = require('ali-oss');
 const Apify = require('apify');
 
 module.exports.hideTokenFromInput = (input) => {
-    const newInput = { ...input, s3AccessKeyId: '******', s3SecretAccessKey: '******' };
+    const newInput = { ...input, s3AccessKeyId: '******', s3SecretAccessKey: '******', ossAccessKeyId: '******', ossAccessKeySecret: '******' };
     return newInput;
 };
 
@@ -18,6 +19,16 @@ module.exports.setS3 = (credentials) => {
     const s3 = new AWS.S3(awsS3Params);
     return s3;
 };
+
+module.exports.setOSS = (credentials) => {
+    const ossClient = new OSS({
+        region: credentials.ossRegion,
+        bucket: credentials.ossBucket,
+        accessKeyId: credentials.ossAccessKeyId,
+        accessKeySecret: credentials.ossAccessKeySecret
+    })
+    return ossClient;
+}
 
 // Simple recursive load from dataset
 const loadItems = async ({ datasetId, from, to }, offset = 0, items = []) => {

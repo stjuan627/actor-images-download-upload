@@ -37,6 +37,13 @@ const upload = async (key, buffer, uploadOptions) => {
             errors.push(e.message);
         });
     }
+
+    if (uploadOptions.uploadTo === 'oss') {
+        const result = await uploadOptions.ossClient.put(key, buffer).catch(e => {
+            errors.push(e.message)
+        })
+    }
+
     if (errors.length > 0) {
         return {
             imageUploaded: false,
